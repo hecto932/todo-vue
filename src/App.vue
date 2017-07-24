@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     totalTime () {
-      return this.tasks.length ? this.tasks.reduce((a, b) => return parseInt(a.times) + parseInt(b.times) ) : 0
+      return this.tasks.length ? this.tasks.reduce((a, b) => parseInt(a.times) + parseInt(b.times) ) : 0
     }
   }
 }
