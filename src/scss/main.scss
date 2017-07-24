@@ -1,0 +1,19 @@
+@import "~bulma/bulma.sass";
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.todo-title {
+  text-align: center;
+}
+.todo-container {
+  border: 1px solid #3b3b3b;
+  padding: 1em;
+}
+
+.todo-form {
+  padding: 1em;
+}
+
+.todo-list {
+  margin: 1em;
+  padding: 1em;
+}

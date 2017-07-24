@@ -1,22 +1,28 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+<template lang="pug">
+  #app
+    .columns.is-mobile
+      .column.is-half.is-offset-one-quarter
+        .todo-container
+          h1.todo-title
+            strong TODO LIST
+          p User: {{ name }}
+          fieldset.todo-form
+            legend Add new task
+            p 
+              input(type="text", placeholder="Title", v-model="newTask.title")
+            p 
+              input(type="number", placeholder="Hours worked", v-model="newTask.times")
+            p
+              button(@click="addTask") Save
+              button(@click="cancel") Cancel
+          p(v-show="!tasks.length") There isn't tasks yet ...
+          div
+            ol.todo-list
+              li(v-for="(t, i) in tasks") 
+                span {{ t.title }} - {{ t.times }}
+                span(@click="removeTask(i)")  ❌
+            hr
+            strong Total: {{ totalTime }}
 </template>
 
 <script>
@@ -24,37 +30,47 @@ export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+     name: 'Hector Flores',
+     newTask: {
+      title: '',
+      times: 0
+     },
+     tasks: []
+    }
+  },
+  created() {
+    this.tasks = JSON.parse(localStorage.getItem('tasks')) || []
+  },
+  methods: {
+    addTask() {
+      if (this.newTask.title != '' && this.newTask.time != 0) {
+
+        this.tasks.push(this.newTask)
+
+        localStorage.setItem('tasks', JSON.stringify(this.tasks))
+
+        this.newTask.title = ''
+        this.newTask.time = 0 
+      }
+    },
+    removeTask(index) {
+      this.tasks.splice(index, 1)
+      localStorage.setItem('tasks', JSON.stringify(this.tasks)) 
+    },
+    cancel () {
+      this.newTask.title = ''
+      this.newTask.times = 0
+    }
+  },
+  computed: {
+    totalTime () {
+      return this.tasks.length ? this.tasks.reduce((a, b) => {  console.log(a); return parseInt(a.times) + parseInt(b.times)  } ) : 0
     }
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import './scss/main.scss';
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
