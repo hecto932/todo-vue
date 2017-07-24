@@ -43,14 +43,19 @@ export default {
   },
   methods: {
     addTask() {
-      if (this.newTask.title != '' && this.newTask.time != 0) {
+      if (this.newTask.title != '' && this.newTask.times != 0) {
 
-        this.tasks.push(this.newTask)
+        const task = {
+          title: this.newTask.title,
+          times: this.newTask.times
+        }
+
+        this.tasks.push(task)
 
         localStorage.setItem('tasks', JSON.stringify(this.tasks))
 
         this.newTask.title = ''
-        this.newTask.time = 0 
+        this.newTask.times = 0 
       }
     },
     removeTask(index) {
@@ -64,7 +69,11 @@ export default {
   },
   computed: {
     totalTime () {
-      return this.tasks.length ? this.tasks.reduce((a, b) => parseInt(a.times) + parseInt(b.times) ) : 0
+      let total = this.tasks.reduce((initValue, task) => {
+        return initValue + parseInt(task.times)
+      }, 0)
+
+      return total
     }
   }
 }
